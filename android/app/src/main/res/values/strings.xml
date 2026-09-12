@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">RupeeOS</string>
+    <string name="app_tagline">Personal Financial Operating System</string>
+    
+    <!-- Navigation Tabs -->
+    <string name="nav_home">Home</string>
+    <string name="nav_budget">Budget</string>
+    <string name="nav_add">Add</string>
+    <string name="nav_essentials">Essentials</string>
+    <string name="nav_insights">Insights</string>
+    <string name="nav_goals">Goals</string>
+    <string name="nav_simulator">Simulator</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Financial Terms -->
+    <string name="available_money">Available Money</string>
+    <string name="safe_daily_spend">Safe to Spend</string>
+    <string name="safe_daily_spend_subtitle">Safe daily burn threshold</string>
+    <string name="committed_money">Committed</string>
+    <string name="flexible_money">Flexible Pool</string>
+    <string name="total_spent">Total Spent</string>
+    <string name="allocation_gap">Allocation Gap</string>
+
+    <!-- Quick Actions -->
+    <string name="action_add_expense">Add Expense</string>
+    <string name="action_add_income">Add Income</string>
+    <string name="action_quick_purchase">Record Purchase</string>
+    <string name="action_goal_deposit">Contribute to Goal</string>
+    <string name="action_rollover">Rollover Month</string>
+</resources>

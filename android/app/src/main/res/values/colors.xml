@@ -1,0 +1,20 @@
+<resources>
+    <!-- Obsidian Dark Base -->
+    <color name="bg_app_dark">#080C14</color>
+    <color name="bg_surface_dark">#0E1524</color>
+    <color name="bg_elevated_dark">#151F33</color>
+    
+    <!-- Slate Light Base -->
+    <color name="bg_app_light">#F8FAFC</color>
+    <color name="bg_surface_light">#FFFFFF</color>
+    <color name="bg_elevated_light">#F1F5F9</color>
+
+    <!-- Emerald Accents -->
+    <color name="accent_emerald">#10B981</color>
+    <color name="accent_emerald_hover">#34D399</color>
+
+    <!-- Semantic Status -->
+    <color name="status_warning">#F59E0B</color>
+    <color name="status_danger">#F43F5E</color>
+    <color name="status_info">#06B6D4</color>
+</resources>
