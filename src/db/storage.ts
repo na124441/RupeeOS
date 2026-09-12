@@ -17,6 +17,7 @@ const STORAGE_KEYS = {
   GOALS: 'rupeeos_goals_v1',
   SUBSCRIPTIONS: 'rupeeos_subscriptions_v1',
   CURRENT_MONTH: 'rupeeos_active_month_v1',
+  ONBOARDED: 'rupeeos_onboarded_v1',
 };
 
 export class StorageService {
@@ -151,6 +152,18 @@ export class StorageService {
     localStorage.setItem(STORAGE_KEYS.SUBSCRIPTIONS, JSON.stringify(subs));
   }
 
+  static hasCompletedOnboarding(): boolean {
+    return localStorage.getItem(STORAGE_KEYS.ONBOARDED) === 'true';
+  }
+
+  static setOnboarded(value: boolean): void {
+    if (value) {
+      localStorage.setItem(STORAGE_KEYS.ONBOARDED, 'true');
+    } else {
+      localStorage.removeItem(STORAGE_KEYS.ONBOARDED);
+    }
+  }
+
   static resetToDemoData(): void {
     const plans: Record<string, MonthlyPlan> = {
       [INITIAL_MONTH_KEY]: INITIAL_PLAN,
@@ -162,6 +175,7 @@ export class StorageService {
     localStorage.setItem(STORAGE_KEYS.GOALS, JSON.stringify(INITIAL_GOALS));
     localStorage.setItem(STORAGE_KEYS.SUBSCRIPTIONS, JSON.stringify(INITIAL_SUBSCRIPTIONS));
     localStorage.setItem(STORAGE_KEYS.CURRENT_MONTH, INITIAL_MONTH_KEY);
+    localStorage.setItem(STORAGE_KEYS.ONBOARDED, 'true');
   }
 
   static clearAll(): void {
@@ -171,5 +185,6 @@ export class StorageService {
     localStorage.removeItem(STORAGE_KEYS.TEMPLATES);
     localStorage.removeItem(STORAGE_KEYS.GOALS);
     localStorage.removeItem(STORAGE_KEYS.SUBSCRIPTIONS);
+    localStorage.removeItem(STORAGE_KEYS.ONBOARDED);
   }
 }

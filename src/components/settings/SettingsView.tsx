@@ -7,12 +7,14 @@ import {
   parseJsonBackupFile,
 } from '../../db/exportImport';
 import {
+  Compass,
   Download,
   FileSpreadsheet,
   FileText,
   Lock,
   RotateCcw,
   ShieldCheck,
+  Sparkles,
   Trash2,
   Upload,
 } from 'lucide-react';
@@ -29,6 +31,8 @@ export const SettingsView: React.FC = () => {
     resetToDemo,
     clearAllData,
     importBackup,
+    setIsOnboardingOpen,
+    setIsRolloverOpen,
   } = useFinance();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -192,6 +196,36 @@ export const SettingsView: React.FC = () => {
         >
           Upload JSON Backup File
         </Button>
+      </Card>
+
+      {/* Guided Financial Wizards */}
+      <Card variant="surface" className="p-6 md:p-8 space-y-4">
+        <h3 className="text-sm font-bold text-[var(--text-primary)] uppercase tracking-wider">
+          Guided Financial Wizards
+        </h3>
+        <p className="text-xs text-[var(--text-muted)]">
+          Revisit the first-time setup or manually trigger month-end surplus rollover.
+        </p>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Button
+            variant="secondary"
+            size="md"
+            icon={<Compass size={15} className="text-[var(--accent-primary)]" />}
+            onClick={() => setIsOnboardingOpen(true)}
+          >
+            Launch Onboarding Wizard
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="md"
+            icon={<Sparkles size={15} className="text-amber-400" />}
+            onClick={() => setIsRolloverOpen(true)}
+          >
+            Launch Month-End Rollover
+          </Button>
+        </div>
       </Card>
 
       {/* Demo Data & Danger Zone */}

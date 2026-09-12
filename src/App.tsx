@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FinanceProvider } from './context/FinanceContext';
+import { FinanceProvider, useFinance } from './context/FinanceContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { Header } from './components/layout/Header';
 import { ActiveTab, Sidebar } from './components/layout/Sidebar';
@@ -17,9 +17,18 @@ import { SettingsView } from './components/settings/SettingsView';
 import { QuickExpenseModal } from './components/transactions/QuickExpenseModal';
 import { AddIncomeModal } from './components/transactions/AddIncomeModal';
 import { MoveMoneyModal } from './components/transactions/MoveMoneyModal';
+import { OnboardingModal } from './components/onboarding/OnboardingModal';
+import { MonthRolloverModal } from './components/rollover/MonthRolloverModal';
 import { animateTabTransition } from './lib/animations/transitions';
 
 const MainAppContent: React.FC = () => {
+  const {
+    isOnboardingOpen,
+    setIsOnboardingOpen,
+    isRolloverOpen,
+    setIsRolloverOpen,
+  } = useFinance();
+
   const [activeTab, setActiveTabState] = useState<ActiveTab>('dashboard');
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
   const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false);
@@ -136,6 +145,18 @@ const MainAppContent: React.FC = () => {
       <MoveMoneyModal
         isOpen={isMoveMoneyModalOpen}
         onClose={() => setIsMoveMoneyModalOpen(false)}
+      />
+
+      {/* First-Time Setup Onboarding Wizard */}
+      <OnboardingModal
+        isOpen={isOnboardingOpen}
+        onClose={() => setIsOnboardingOpen(false)}
+      />
+
+      {/* Month-End Rollover & Seeding Wizard */}
+      <MonthRolloverModal
+        isOpen={isRolloverOpen}
+        onClose={() => setIsRolloverOpen(false)}
       />
     </div>
   );

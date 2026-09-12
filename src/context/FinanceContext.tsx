@@ -7,11 +7,13 @@ import {
   Goal,
   HealthScore,
   MonthlyPlan,
+  MonthRolloverOptions,
   SimulationResult,
   Subscription,
   Transaction,
 } from '../types';
 import { StorageService } from '../db/storage';
+import { INITIAL_MONTH_KEY } from '../db/initialData';
 import { calculateBurnRateMetrics } from '../services/burnRateService';
 import { calculateHealthScore } from '../services/healthScoreService';
 import { generateFinancialAlerts } from '../services/alertService';
@@ -53,6 +55,14 @@ interface FinanceContextType {
   resetToDemo: () => void;
   clearAllData: () => void;
   importBackup: (backup: RupeeOSBackupData) => void;
+
+  // Onboarding & Rollover
+  isOnboardingOpen: boolean;
+  setIsOnboardingOpen: (open: boolean) => void;
+  isRolloverOpen: boolean;
+  setIsRolloverOpen: (open: boolean) => void;
+  completeOnboarding: (monthlyInflow: number, allocations: Record<CategoryId, number>, loadDemo?: boolean) => void;
+  executeMonthRollover: (targetMonthKey: string, options: MonthRolloverOptions) => void;
 }
 
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
@@ -65,6 +75,8 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [templates, setTemplates] = useState<EssentialTemplate[]>(() => StorageService.getTemplates());
   const [goals, setGoals] = useState<Goal[]>(() => StorageService.getGoals());
   const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => StorageService.getSubscriptions());
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(() => !StorageService.hasCompletedOnboarding());
+  const [isRolloverOpen, setIsRolloverOpen] = useState<boolean>(false);
 
   // Switch active month
   const setActiveMonth = (monthKey: string) => {
@@ -385,6 +397,86 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
+  const completeOnboarding = (
+    monthlyInflow: number,
+    allocations: Record<CategoryId, number>,
+    loadDemo: boolean = false
+  ) => {
+    if (loadDemo) {
+      StorageService.resetToDemoData();
+      setActiveMonthState(INITIAL_MONTH_KEY);
+      setPlan(StorageService.getPlan(INITIAL_MONTH_KEY));
+      setTransactions(StorageService.getTransactions());
+      setEssentials(StorageService.getEssentials());
+      setTemplates(StorageService.getTemplates());
+      setGoals(StorageService.getGoals());
+      setSubscriptions(StorageService.getSubscriptions());
+    } else {
+      setPlan(prev => ({
+        ...prev,
+        availableMoney: Math.max(0, monthlyInflow),
+        allocations,
+        updatedAt: new Date().toISOString(),
+      }));
+    }
+    StorageService.setOnboarded(true);
+    setIsOnboardingOpen(false);
+  };
+
+  const executeMonthRollover = (targetMonthKey: string, options: MonthRolloverOptions) => {
+    const surplus = Math.max(0, metrics.remainingMoney);
+
+    // 1. If user chose to contribute surplus to a goal
+    if (options.surplusAction === 'goal' && options.targetGoalId && surplus > 0) {
+      contributeToGoal(options.targetGoalId, surplus);
+    }
+
+    // 2. Prepare target month plan
+    const existingTargetPlan = StorageService.getPlan(targetMonthKey);
+    let targetInflow = existingTargetPlan.availableMoney;
+    if (options.surplusAction === 'carryover' && surplus > 0) {
+      targetInflow += surplus;
+    }
+
+    const newAllocations = options.copyAllocations
+      ? { ...plan.allocations }
+      : { ...existingTargetPlan.allocations };
+
+    const newTargetPlan: MonthlyPlan = {
+      ...existingTargetPlan,
+      monthKey: targetMonthKey,
+      monthName: getMonthName(targetMonthKey),
+      availableMoney: targetInflow,
+      allocations: newAllocations,
+      updatedAt: new Date().toISOString(),
+    };
+
+    StorageService.savePlan(newTargetPlan);
+
+    // 3. Populate essentials from templates if requested and target month has none
+    if (options.populateEssentialsFromTemplates && templates.length > 0) {
+      const existingInTarget = essentials.filter(e => e.monthKey === targetMonthKey);
+      if (existingInTarget.length === 0) {
+        const newEssentials: EssentialItem[] = templates.map(t => ({
+          id: `ess-${Date.now()}-${t.id}`,
+          name: t.name,
+          quantity: t.defaultQuantity,
+          unit: t.defaultUnit,
+          estimatedCost: t.estimatedCost,
+          isPurchased: false,
+          preferredProvider: t.preferredProvider,
+          categoryId: t.categoryId,
+          monthKey: targetMonthKey,
+        }));
+        setEssentials(prev => [...prev, ...newEssentials]);
+      }
+    }
+
+    // 4. Switch to target month and close modal
+    setActiveMonth(targetMonthKey);
+    setIsRolloverOpen(false);
+  };
+
   return (
     <FinanceContext.Provider
       value={{
@@ -420,6 +512,12 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         resetToDemo,
         clearAllData,
         importBackup,
+        isOnboardingOpen,
+        setIsOnboardingOpen,
+        isRolloverOpen,
+        setIsRolloverOpen,
+        completeOnboarding,
+        executeMonthRollover,
       }}
     >
       {children}

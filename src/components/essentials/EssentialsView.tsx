@@ -10,6 +10,7 @@ import { Button } from '../ui/Button';
 import { Checkbox } from '../ui/Checkbox';
 import { EmptyState } from '../ui/EmptyState';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
+import { EssentialConfirmModal } from './EssentialConfirmModal';
 
 export const EssentialsView: React.FC = () => {
   const {
@@ -27,6 +28,7 @@ export const EssentialsView: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'checklist' | 'templates'>('checklist');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [confirmingItem, setConfirmingItem] = useState<EssentialItem | null>(null);
 
   // Form states for new essential
   const [name, setName] = useState('');
@@ -202,7 +204,13 @@ export const EssentialsView: React.FC = () => {
                       <Checkbox
                         id={`ess-check-${item.id}`}
                         checked={item.isPurchased}
-                        onChange={() => toggleEssential(item.id, item.estimatedCost, true)}
+                        onChange={() => {
+                          if (item.isPurchased) {
+                            toggleEssential(item.id, undefined, false);
+                          } else {
+                            setConfirmingItem(item);
+                          }
+                        }}
                       />
 
                       <div>
@@ -457,6 +465,18 @@ export const EssentialsView: React.FC = () => {
           </div>
         </form>
       </Modal>
+
+      {/* Actual Price Paid Confirmation Micro-Modal */}
+      <EssentialConfirmModal
+        item={confirmingItem}
+        isOpen={!!confirmingItem}
+        onClose={() => setConfirmingItem(null)}
+        onConfirm={(actualCost, recordExpense) => {
+          if (confirmingItem) {
+            toggleEssential(confirmingItem.id, actualCost, recordExpense);
+          }
+        }}
+      />
     </div>
   );
 };

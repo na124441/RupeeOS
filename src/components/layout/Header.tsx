@@ -1,5 +1,5 @@
-import React from 'react';
-import { Calendar, ChevronLeft, ChevronRight, Download, Moon, Plus, RotateCcw, Sun } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Calendar, ChevronLeft, ChevronRight, Download, Moon, Plus, RotateCcw, Sparkles, Sun, Wifi, WifiOff } from 'lucide-react';
 import { useFinance } from '../../context/FinanceContext';
 import { useTheme } from '../../context/ThemeContext';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
@@ -11,8 +11,23 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onOpenQuickExpense, onOpenExportModal }) => {
-  const { activeMonth, setActiveMonth, plan, metrics, resetToDemo } = useFinance();
+  const { activeMonth, setActiveMonth, plan, metrics, resetToDemo, setIsRolloverOpen } = useFinance();
   const { theme, toggleTheme } = useTheme();
+
+  const [isOnline, setIsOnline] = useState<boolean>(() =>
+    typeof navigator !== 'undefined' ? navigator.onLine : true
+  );
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   const handlePrevMonth = () => {
     const [year, month] = activeMonth.split('-').map(Number);
@@ -74,10 +89,29 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuickExpense, onOpenExport
             <ChevronRight size={16} />
           </button>
         </div>
+
+        {/* Month Rollover Trigger */}
+        <button
+          onClick={() => setIsRolloverOpen(true)}
+          className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-app)] hover:border-[var(--accent-primary)] text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all min-h-[36px] shadow-sm group"
+          title="Close month and rollover surplus"
+        >
+          <Sparkles size={13} className="text-[var(--accent-primary)] group-hover:scale-110 transition-transform" />
+          <span>Rollover Month</span>
+        </button>
       </div>
 
       {/* Available Balance Pill & Actions */}
       <div className="flex items-center gap-2 md:gap-3">
+        {/* Local-First Connectivity Badge */}
+        <div
+          className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[11px] text-[var(--text-muted)] select-none"
+          title={isOnline ? '100% private. All data is saved on your device.' : 'Working offline. Changes are saved locally.'}
+        >
+          <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}`} />
+          <span>{isOnline ? 'Local-First' : 'Offline Mode'}</span>
+        </div>
+
         {/* Available Money pill */}
         <div className="hidden sm:flex items-center gap-2.5 bg-[var(--bg-surface-elevated)] border border-[var(--border-app)] rounded-xl px-3.5 py-1.5 shadow-sm">
           <span className="text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-medium">Available</span>

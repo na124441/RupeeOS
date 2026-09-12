@@ -157,3 +157,10 @@ export interface SimulationResult {
     willExceed: boolean;
   };
 }
+
+export interface MonthRolloverOptions {
+  surplusAction: 'carryover' | 'goal' | 'none';
+  targetGoalId?: string;
+  copyAllocations: boolean;
+  populateEssentialsFromTemplates: boolean;
+}
