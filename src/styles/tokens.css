@@ -1,0 +1,80 @@
+:root {
+  /* Dark Mode Default (Obsidian Fintech) */
+  --bg-app: #080c14;
+  --bg-surface: #0e1524;
+  --bg-surface-elevated: #151f33;
+  --bg-surface-hover: #1b2842;
+  --bg-surface-active: #243557;
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #090d16;
+
+  --border-app: rgba(148, 163, 184, 0.1);
+  --border-subtle: rgba(148, 163, 184, 0.06);
+  --border-hover: rgba(148, 163, 184, 0.22);
+  --border-accent: rgba(16, 185, 129, 0.35);
+
+  --accent-primary: #10b981;
+  --accent-hover: #34d399;
+  --accent-surface: rgba(16, 185, 129, 0.12);
+  --accent-glow: rgba(16, 185, 129, 0.2);
+
+  --status-success: #10b981;
+  --status-warning: #f59e0b;
+  --status-danger: #f43f5e;
+  --status-info: #06b6d4;
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 36px -6px rgba(0, 0, 0, 0.6);
+  --shadow-accent: 0 0 24px -4px rgba(16, 185, 129, 0.25);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-fast: 150ms var(--ease-out-expo);
+  --transition-normal: 250ms var(--ease-out-expo);
+  --transition-slow: 400ms var(--ease-out-expo);
+}
+
+.light {
+  /* Premium Slate-Light Theme (High contrast, zero glare) */
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f1f5f9;
+  --bg-surface-hover: #e2e8f0;
+  --bg-surface-active: #cbd5e1;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+
+  --border-app: rgba(15, 23, 42, 0.1);
+  --border-subtle: rgba(15, 23, 42, 0.05);
+  --border-hover: rgba(15, 23, 42, 0.2);
+  --border-accent: rgba(16, 185, 129, 0.45);
+
+  --accent-primary: #059669;
+  --accent-hover: #047857;
+  --accent-surface: rgba(5, 150, 105, 0.1);
+  --accent-glow: rgba(5, 150, 105, 0.15);
+
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 14px -2px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
+  --shadow-accent: 0 0 20px -4px rgba(5, 150, 105, 0.15);
+}
+
+/* Tabular numbers for financial accuracy */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1;
+}
