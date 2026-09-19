@@ -14,6 +14,7 @@ import {
   Target,
   X,
 } from 'lucide-react';
+import { BrandLogo } from '../common/BrandLogo';
 import { ActiveTab } from './Sidebar';
 
 interface BottomNavProps {
@@ -43,12 +44,15 @@ export const BottomNav: React.FC<BottomNavProps> = ({
     <>
       {/* "More" Drawer Modal for Mobile */}
       {showMoreMenu && (
-        <div className="fixed inset-0 z-50 md:hidden bg-black/80 backdrop-blur-sm animate-in fade-in">
+        <div className="fixed inset-0 z-50 md:hidden bg-black/75 backdrop-blur-md animate-in fade-in">
           <div className="fixed inset-0" onClick={() => setShowMoreMenu(false)} />
-          <div className="fixed bottom-0 left-0 right-0 bg-[var(--bg-surface)] border-t border-[var(--border-app)] rounded-t-3xl p-6 z-10 animate-in slide-in-from-bottom">
+          <div className="fixed bottom-0 left-0 right-0 bg-[var(--bg-surface)] border-t border-[var(--border-app)] rounded-t-3xl p-6 z-10 animate-in slide-in-from-bottom shadow-2xl">
             <div className="w-12 h-1.5 rounded-full bg-[var(--border-hover)] mx-auto mb-4" />
             <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)] mb-4">
-              <h3 className="font-bold text-[var(--text-primary)]">All Financial Tools</h3>
+              <div className="flex items-center gap-2">
+                <BrandLogo size="sm" />
+                <h3 className="font-bold text-[var(--text-primary)]">All Financial Tools</h3>
+              </div>
               <button
                 onClick={() => setShowMoreMenu(false)}
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)] min-w-[44px] min-h-[44px]"
@@ -109,7 +113,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         {/* Center Quick Add Expense Floating Button */}
         <button
           onClick={onOpenQuickExpense}
-          className="w-12 h-12 -mt-5 rounded-full bg-[var(--accent-primary)] hover:bg-[var(--accent-hover)] text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-500/30 transition-transform active:scale-90 border-2 border-[var(--bg-app)] min-w-[48px] min-h-[48px]"
+          className="w-12 h-12 -mt-5 rounded-full bg-gradient-to-tr from-emerald-500 via-teal-400 to-cyan-400 hover:brightness-110 text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-500/40 transition-transform active:scale-90 border-2 border-[var(--bg-surface)] min-w-[48px] min-h-[48px]"
           title="Add Expense"
           aria-label="Add Expense"
         >

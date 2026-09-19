@@ -101,7 +101,14 @@ const MainAppContent: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] selection:bg-emerald-500/25 selection:text-emerald-300 transition-colors">
+    <div className="min-h-screen flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] selection:bg-emerald-500/25 selection:text-emerald-300 transition-colors relative">
+      {/* Dynamic Ambient Background Glows */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-[var(--ambient-orb-1)] blur-[120px] transition-all duration-700" />
+        <div className="absolute top-1/3 -right-32 w-[30rem] h-[30rem] rounded-full bg-[var(--ambient-orb-2)] blur-[140px] transition-all duration-700" />
+        <div className="absolute -bottom-32 left-1/4 w-[32rem] h-[32rem] rounded-full bg-[var(--ambient-orb-3)] blur-[150px] transition-all duration-700" />
+      </div>
+
       {/* Top sticky header */}
       <Header
         onOpenQuickExpense={() => setIsExpenseModalOpen(true)}
@@ -109,7 +116,7 @@ const MainAppContent: React.FC = () => {
       />
 
       {/* Main Workspace Body */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden relative z-10">
         {/* Desktop Collapsible Sidebar */}
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 

@@ -116,9 +116,12 @@ export const AnalyticsView: React.FC = () => {
       {/* Financial Health Score Hero (0-100) */}
       <Card
         variant="surface"
-        className="p-6 md:p-8 bg-gradient-to-br from-[var(--bg-surface)] to-[var(--bg-surface-elevated)] border-[var(--border-accent)] shadow-[var(--shadow-md)] space-y-6"
+        className="p-6 md:p-8 bg-gradient-to-br from-[var(--bg-surface)] to-[var(--bg-surface-elevated)] border-[var(--border-accent)] shadow-[var(--shadow-md)] space-y-6 relative overflow-hidden"
       >
-        <div className="flex items-center justify-between flex-wrap gap-4">
+        {/* Ambient glow */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-emerald-500/15 via-teal-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex items-center justify-between flex-wrap gap-4 relative z-10">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-[var(--accent-surface)] border border-[var(--border-accent)] flex items-center justify-center text-[var(--accent-primary)] shadow-sm">
               <HeartPulse size={32} />
@@ -138,9 +141,9 @@ export const AnalyticsView: React.FC = () => {
             <AnimatedNumber
               value={healthScore.score}
               isCurrency={false}
-              className="text-5xl md:text-6xl font-black text-[var(--accent-primary)] tracking-tight"
+              className="text-4xl sm:text-5xl font-black font-mono text-[var(--accent-primary)]"
             />
-            <span className="text-lg font-bold font-mono text-[var(--text-muted)]">/ 100</span>
+            <span className="text-sm font-medium text-[var(--text-muted)]">/ 100</span>
           </div>
         </div>
 
@@ -148,46 +151,56 @@ export const AnalyticsView: React.FC = () => {
           {healthScore.summary}
         </p>
 
-        {/* Transparent Factor Breakdown */}
-        <div className="space-y-2 pt-3 border-t border-[var(--border-subtle)]">
-          <span className="text-xs uppercase tracking-wider font-bold text-[var(--text-muted)]">
-            Score Factor Breakdown
-          </span>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-            {healthScore.factors.map((f) => (
-              <div
-                key={f.name}
-                className="p-3.5 rounded-2xl bg-[var(--bg-app)] border border-[var(--border-subtle)] flex items-start justify-between gap-3"
-              >
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className={`text-xs font-bold font-mono px-2 py-0.5 rounded ${
-                        f.impact === 'positive'
-                          ? 'bg-[var(--accent-surface)] text-[var(--accent-primary)] border border-[var(--border-accent)]'
-                          : f.impact === 'negative'
-                          ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
-                          : 'bg-[var(--bg-surface-elevated)] text-[var(--text-muted)]'
-                      }`}
-                    >
-                      {f.impact === 'positive' ? `+${f.score}` : `${f.score}`} pts
-                    </span>
-                    <h5 className="text-xs font-semibold text-[var(--text-primary)]">{f.name}</h5>
+        {/* Breakdown bar */}
+        <div className="space-y-2 relative z-10">
+          <div className="w-full bg-[var(--bg-app)] rounded-full h-3 overflow-hidden p-0.5 border border-[var(--border-subtle)]">
+            <div
+              className="h-full rounded-full transition-all duration-700 ease-out bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400"
+              style={{ width: `${healthScore.score}%` }}
+            />
+          </div>
+
+          {/* Factor Breakdown Chips */}
+          <div className="space-y-2 pt-3 border-t border-[var(--border-subtle)]">
+            <span className="text-xs uppercase tracking-wider font-bold text-[var(--text-muted)]">
+              Score Factor Breakdown
+            </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+              {healthScore.factors.map((f, i) => (
+                <div
+                  key={i}
+                  className="p-3.5 rounded-xl bg-[var(--bg-app)]/80 border border-[var(--border-subtle)] flex items-start justify-between gap-3"
+                >
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
+                          f.impact === 'positive'
+                            ? 'bg-emerald-500/15 text-emerald-400'
+                            : f.impact === 'negative'
+                            ? 'bg-rose-500/15 text-rose-400'
+                            : 'bg-[var(--bg-surface-elevated)] text-[var(--text-muted)]'
+                        }`}
+                      >
+                        {f.impact === 'positive' ? `+${f.score}` : `${f.score}`} pts
+                      </span>
+                      <h5 className="text-xs font-semibold text-[var(--text-primary)]">{f.name}</h5>
+                    </div>
+                    <p className="text-[11px] text-[var(--text-muted)] mt-1">{f.description}</p>
                   </div>
-                  <p className="text-[11px] text-[var(--text-muted)] mt-1">{f.description}</p>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)] shrink-0">
+                    Max {f.maxScore}
+                  </span>
                 </div>
-                <span className="text-[10px] font-mono text-[var(--text-muted)] shrink-0">
-                  Max {f.maxScore}
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </Card>
 
       {/* Key Metrics Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
-        <Card interactive variant="surface">
+        <Card interactive className="border-t-2 border-t-cyan-500 bg-gradient-to-b from-cyan-500/[0.06] via-[var(--bg-surface)] to-[var(--bg-surface)]">
           <span className="text-xs text-[var(--text-muted)]">Avg Daily Spend</span>
           <div className="text-xl font-bold font-mono text-[var(--text-primary)] mt-1">
             <AnimatedNumber value={avgDailySpend} />
@@ -195,7 +208,7 @@ export const AnalyticsView: React.FC = () => {
           <span className="text-[10px] text-[var(--text-muted)]">Over {metrics.daysElapsed} days elapsed</span>
         </Card>
 
-        <Card interactive variant="surface">
+        <Card interactive className="border-t-2 border-t-emerald-500 bg-gradient-to-b from-emerald-500/[0.06] via-[var(--bg-surface)] to-[var(--bg-surface)]">
           <span className="text-xs text-[var(--text-muted)]">Savings Rate</span>
           <div className="text-xl font-bold font-mono text-[var(--accent-primary)] mt-1">
             <AnimatedNumber value={savingsRate} isCurrency={false} suffix="%" />
@@ -203,7 +216,7 @@ export const AnalyticsView: React.FC = () => {
           <span className="text-[10px] text-[var(--text-muted)]">Dedicated to future & reserve</span>
         </Card>
 
-        <Card interactive variant="surface">
+        <Card interactive className="border-t-2 border-t-amber-500 bg-gradient-to-b from-amber-500/[0.06] via-[var(--bg-surface)] to-[var(--bg-surface)]">
           <span className="text-xs text-[var(--text-muted)]">Largest Expense</span>
           <div className="text-xl font-bold font-mono text-[var(--text-primary)] mt-1">
             <AnimatedNumber value={largestExpense} />
@@ -211,7 +224,7 @@ export const AnalyticsView: React.FC = () => {
           <span className="text-[10px] text-[var(--text-muted)] truncate block">{largestExpenseNote}</span>
         </Card>
 
-        <Card interactive variant="surface">
+        <Card interactive className="border-t-2 border-t-purple-500 bg-gradient-to-b from-purple-500/[0.06] via-[var(--bg-surface)] to-[var(--bg-surface)]">
           <span className="text-xs text-[var(--text-muted)]">Top Merchant</span>
           <div className="text-lg font-bold text-[var(--text-primary)] mt-1 truncate">
             {mostFrequentMerchant}

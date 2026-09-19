@@ -18,19 +18,20 @@ export const SafeSpendHero: React.FC = () => {
         data-animate="hero"
         className="relative overflow-hidden rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-app)] p-6 md:p-8 shadow-[var(--shadow-md)]"
       >
-        {/* Subtle ambient lighting accent */}
-        <div className="absolute top-0 right-0 -mt-12 -mr-12 w-80 h-80 bg-[var(--accent-glow)] rounded-full blur-3xl pointer-events-none" />
+        {/* Luminous multi-color ambient lighting mesh */}
+        <div className="absolute top-0 right-0 -mt-16 -mr-16 w-96 h-96 bg-gradient-to-br from-emerald-500/20 via-teal-500/15 to-cyan-500/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-0 -mb-16 -ml-16 w-80 h-80 bg-gradient-to-tr from-indigo-500/15 via-purple-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
             <div className="flex items-center gap-2">
-              <span className="flex h-2.5 w-2.5 rounded-full bg-[var(--accent-primary)] animate-pulse" />
-              <span className="text-xs uppercase tracking-wider font-bold text-[var(--accent-primary)]">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-[var(--accent-primary)] animate-pulse shadow-sm shadow-emerald-400" />
+              <span className="text-xs uppercase tracking-wider font-extrabold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
                 Safe Daily Burn Engine
               </span>
             </div>
-            <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] bg-[var(--bg-surface-elevated)] px-3 py-1 rounded-full border border-[var(--border-subtle)]">
-              <Calendar size={13} className="text-[var(--text-muted)]" />
+            <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)] bg-[var(--bg-surface-elevated)] px-3 py-1 rounded-full border border-[var(--border-subtle)] shadow-sm">
+              <Calendar size={13} className="text-[var(--accent-primary)]" />
               <span>
                 {metrics.daysRemaining} days remaining in {plan.monthName.split(' ')[0]}
               </span>
@@ -46,26 +47,26 @@ export const SafeSpendHero: React.FC = () => {
               <div className="flex items-baseline gap-2">
                 <AnimatedNumber
                   value={metrics.safeDailySpend}
-                  className="text-4xl sm:text-6xl font-black text-[var(--accent-primary)] tracking-tight"
+                  className="text-4xl sm:text-6xl font-black tracking-tight text-[var(--accent-primary)]"
                 />
                 <span className="text-[var(--text-muted)] font-medium text-sm sm:text-lg">/ day</span>
               </div>
 
               {/* Explainability Breakdown */}
-              <div className="mt-4 p-3 rounded-2xl bg-[var(--bg-app)]/80 border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono">
-                <div className="flex items-center gap-1">
+              <div className="mt-4 p-3.5 rounded-2xl bg-[var(--bg-surface-elevated)]/90 border border-[var(--border-subtle)] text-xs text-[var(--text-secondary)] flex flex-wrap items-center gap-x-4 gap-y-1.5 font-mono shadow-sm">
+                <div className="flex items-center gap-1.5">
                   <span className="text-[var(--text-muted)]">Remaining:</span>
                   <span className="text-[var(--text-primary)] font-bold">
                     {formatRupee(metrics.remainingMoney)}
                   </span>
                 </div>
                 <span className="text-[var(--text-muted)]">−</span>
-                <div className="flex items-center gap-1 text-amber-500/90">
-                  <span>Upcoming Commitments:</span>
+                <div className="flex items-center gap-1.5 text-amber-400">
+                  <span>Commitments:</span>
                   <span className="font-bold">{formatRupee(committedTotal)}</span>
                 </div>
                 <span className="text-[var(--text-muted)]">=</span>
-                <div className="flex items-center gap-1 text-[var(--accent-primary)] font-bold">
+                <div className="flex items-center gap-1.5 text-[var(--accent-primary)] font-bold">
                   <span>Flexible:</span>
                   <span>{formatRupee(metrics.flexibleMoney)}</span>
                 </div>
@@ -75,10 +76,10 @@ export const SafeSpendHero: React.FC = () => {
             {/* Right Mini Status & Weekly Target */}
             <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* This Week Burn */}
-              <div className="p-4 rounded-2xl bg-[var(--bg-app)]/70 border border-[var(--border-subtle)]">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm">
                 <div className="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1.5">
                   <span className="flex items-center gap-1">
-                    <TrendingDown size={14} className="text-[var(--accent-primary)]" />
+                    <TrendingDown size={14} className="text-cyan-400" />
                     Last 7 Days
                   </span>
                   <span className="font-mono text-[var(--text-secondary)]">
@@ -91,10 +92,12 @@ export const SafeSpendHero: React.FC = () => {
                     / {formatRupee(metrics.weeklyBudget)} safe
                   </span>
                 </div>
-                <div className="w-full bg-[var(--bg-surface-elevated)] h-1.5 rounded-full mt-2 overflow-hidden">
+                <div className="w-full bg-[var(--bg-surface)] h-2 rounded-full mt-2 overflow-hidden border border-[var(--border-subtle)]">
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${
-                      metrics.weeklySpent > metrics.weeklyBudget ? 'bg-amber-500' : 'bg-[var(--accent-primary)]'
+                      metrics.weeklySpent > metrics.weeklyBudget
+                        ? 'bg-gradient-to-r from-amber-500 to-rose-500'
+                        : 'bg-gradient-to-r from-teal-400 to-emerald-400'
                     }`}
                     style={{
                       width: `${Math.min(
@@ -107,14 +110,14 @@ export const SafeSpendHero: React.FC = () => {
               </div>
 
               {/* Month Forecast */}
-              <div className="p-4 rounded-2xl bg-[var(--bg-app)]/70 border border-[var(--border-subtle)]">
+              <div className="p-4 rounded-2xl bg-gradient-to-br from-[var(--bg-surface-elevated)] to-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm">
                 <div className="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1.5">
                   <span className="flex items-center gap-1">
                     <Zap
                       size={14}
-                      className={metrics.isOverBudgetProjected ? 'text-amber-500' : 'text-[var(--accent-primary)]'}
+                      className={metrics.isOverBudgetProjected ? 'text-amber-400' : 'text-emerald-400'}
                     />
-                    Projected Month-End
+                    Projected Spend
                   </span>
                 </div>
                 <div className="text-lg font-bold font-mono text-[var(--text-primary)]">
@@ -139,44 +142,64 @@ export const SafeSpendHero: React.FC = () => {
         </div>
       </div>
 
-      {/* 4 Financial Stat Cards with subtle hover elevation */}
+      {/* 4 Financial Stat Cards with Vibrant Themed Accents */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {/* Available Money */}
-        <Card interactive animate variant="surface">
+        {/* Available Money - Emerald Theme */}
+        <Card
+          interactive
+          animate
+          className="border-t-2 border-t-emerald-500 bg-gradient-to-b from-emerald-500/[0.08] via-[var(--bg-surface)] to-[var(--bg-surface)] hover:border-emerald-500/50"
+        >
           <div className="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1">
-            <span>Available Balance</span>
-            <Wallet size={15} className="text-[var(--accent-primary)]" />
+            <span className="font-medium">Available Balance</span>
+            <div className="p-1 rounded-lg bg-emerald-500/15 text-emerald-400">
+              <Wallet size={14} />
+            </div>
           </div>
           <div className="text-xl md:text-2xl font-black font-mono text-[var(--text-primary)]">
             <AnimatedNumber value={metrics.remainingMoney} />
           </div>
-          <div className="text-[11px] text-[var(--text-muted)] mt-1">
-            Current unspent funds
+          <div className="text-[11px] text-emerald-400/80 font-medium mt-1">
+            Current unspent pool
           </div>
         </Card>
 
-        {/* Monthly Money Inflow */}
-        <Card interactive animate variant="surface">
+        {/* Monthly Money Inflow - Cyan Theme */}
+        <Card
+          interactive
+          animate
+          className="border-t-2 border-t-cyan-500 bg-gradient-to-b from-cyan-500/[0.08] via-[var(--bg-surface)] to-[var(--bg-surface)] hover:border-cyan-500/50"
+        >
           <div className="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1">
-            <span>Monthly Money</span>
-            <span className="text-[11px] font-mono text-[var(--text-muted)]">Total</span>
+            <span className="font-medium">Monthly Inflow</span>
+            <div className="p-1 rounded-lg bg-cyan-500/15 text-cyan-400">
+              <Zap size={14} />
+            </div>
           </div>
           <div className="text-xl md:text-2xl font-black font-mono text-[var(--text-primary)]">
             <AnimatedNumber value={plan.availableMoney} />
           </div>
-          <div className="text-[11px] text-[var(--text-muted)] mt-1">
-            Set for {plan.monthName.split(' ')[0]}
+          <div className="text-[11px] text-cyan-400/80 font-medium mt-1">
+            Budget for {plan.monthName.split(' ')[0]}
           </div>
         </Card>
 
-        {/* Allocated */}
-        <Card interactive animate variant="surface">
+        {/* Allocated - Violet Theme */}
+        <Card
+          interactive
+          animate
+          className={`border-t-2 ${
+            isOverAllocated ? 'border-t-rose-500' : 'border-t-purple-500'
+          } bg-gradient-to-b from-purple-500/[0.08] via-[var(--bg-surface)] to-[var(--bg-surface)] hover:border-purple-500/50`}
+        >
           <div className="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1">
-            <span>Allocated</span>
+            <span className="font-medium">Allocated</span>
             {isOverAllocated ? (
-              <span className="text-[10px] font-bold text-rose-400 uppercase bg-rose-500/10 px-1 rounded">Over</span>
+              <span className="text-[10px] font-bold text-rose-400 uppercase bg-rose-500/15 px-1 rounded">Over</span>
             ) : (
-              <ShieldCheck size={15} className="text-[var(--accent-primary)]" />
+              <div className="p-1 rounded-lg bg-purple-500/15 text-purple-400">
+                <ShieldCheck size={14} />
+              </div>
             )}
           </div>
           <div
@@ -193,18 +216,24 @@ export const SafeSpendHero: React.FC = () => {
           </div>
         </Card>
 
-        {/* Total Spent So Far */}
-        <Card interactive animate variant="surface">
+        {/* Total Spent So Far - Amber Theme */}
+        <Card
+          interactive
+          animate
+          className="border-t-2 border-t-amber-500 bg-gradient-to-b from-amber-500/[0.08] via-[var(--bg-surface)] to-[var(--bg-surface)] hover:border-amber-500/50"
+        >
           <div className="flex items-center justify-between text-xs text-[var(--text-muted)] mb-1">
-            <span>Spent So Far</span>
-            <TrendingDown size={15} className="text-amber-500" />
+            <span className="font-medium">Spent So Far</span>
+            <div className="p-1 rounded-lg bg-amber-500/15 text-amber-400">
+              <TrendingDown size={14} />
+            </div>
           </div>
           <div className="text-xl md:text-2xl font-black font-mono text-[var(--text-primary)]">
             <AnimatedNumber value={metrics.totalSpentThisMonth} />
           </div>
-          <div className="text-[11px] text-[var(--text-muted)] mt-1">
+          <div className="text-[11px] text-amber-400/80 font-medium mt-1">
             {plan.availableMoney > 0
-              ? `${Math.round((metrics.totalSpentThisMonth / plan.availableMoney) * 100)}% of monthly money`
+              ? `${Math.round((metrics.totalSpentThisMonth / plan.availableMoney) * 100)}% of month budget`
               : '0%'}
           </div>
         </Card>

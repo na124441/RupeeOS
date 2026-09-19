@@ -1,13 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
-  <rect width="512" height="512" rx="128" fill="#090d16"/>
-  <rect x="24" y="24" width="464" height="464" rx="104" stroke="#10b981" stroke-width="8" stroke-opacity="0.25"/>
-  <circle cx="256" cy="256" r="180" fill="url(#brand_grad)" opacity="0.12"/>
-  <path d="M180 160h152M180 208h152M180 160v104c0 36 28 64 64 64h24l72 96M244 328c36 0 64-28 64-64v-56" 
-        stroke="#10b981" stroke-width="36" stroke-linecap="round" stroke-linejoin="round"/>
   <defs>
-    <radialGradient id="brand_grad" cx="0.5" cy="0.5" r="0.5" fx="0.5" fy="0.5">
-      <stop stop-color="#10b981"/>
-      <stop offset="1" stop-color="#059669" stop-opacity="0"/>
+    <linearGradient id="logoBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="45%" stop-color="#059669" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="logoGlossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="strokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+    <radialGradient id="glowGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
     </radialGradient>
+    <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#047857" flood-opacity="0.5" />
+    </filter>
   </defs>
+
+  <!-- Ambient Glow -->
+  <rect x="32" y="32" width="448" height="448" rx="128" fill="url(#glowGlow)" filter="blur(20px)" />
+
+  <!-- Main Container -->
+  <rect x="32" y="32" width="448" height="448" rx="120" fill="url(#logoBgGrad)" filter="url(#dropShadow)" />
+
+  <!-- Top Gloss Highlight -->
+  <rect x="32" y="32" width="448" height="224" rx="120" fill="url(#logoGlossGrad)" />
+
+  <!-- Subtle Border Highlight -->
+  <rect x="36" y="36" width="440" height="440" rx="116" stroke="rgba(255, 255, 255, 0.45)" stroke-width="8" />
+
+  <!-- Indian Rupee Symbol (₹) -->
+  <g>
+    <!-- Top Bar -->
+    <path d="M160 144H352" stroke="url(#strokeGrad)" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Second Bar -->
+    <path d="M160 208H312" stroke="url(#strokeGrad)" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Loop & Vertical Line -->
+    <path d="M208 144V272C208 272 296 272 296 208C296 144 208 144 208 144Z" stroke="url(#strokeGrad)" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+    <!-- Diagonal Leg -->
+    <path d="M216 272L328 384" stroke="url(#strokeGrad)" stroke-width="36" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+
+  <!-- Luminous Tech Core Dot -->
+  <circle cx="360" cy="144" r="16" fill="#38bdf8" filter="blur(1px)" />
 </svg>

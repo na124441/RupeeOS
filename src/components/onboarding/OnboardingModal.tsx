@@ -15,6 +15,7 @@ import {
   Wallet,
   X,
 } from 'lucide-react';
+import { BrandLogo } from '../common/BrandLogo';
 import { Button } from '../ui/Button';
 import { Card } from '../ui/Card';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
@@ -105,9 +106,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onClos
         {/* Header with Progress Steps */}
         <div className="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between bg-[var(--bg-surface)]">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[var(--accent-primary)] to-emerald-400 flex items-center justify-center text-slate-950 font-black text-sm">
-              ₹
-            </div>
+            <BrandLogo size="sm" />
             <div>
               <h3 className="text-sm font-bold text-[var(--text-primary)]">
                 Welcome to RupeeOS
@@ -132,8 +131,8 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onClos
           {/* STEP 1: Introduction */}
           {step === 1 && (
             <div className="space-y-6 text-center py-4">
-              <div className="w-16 h-16 rounded-3xl bg-[var(--accent-surface)] border border-[var(--border-accent)] flex items-center justify-center mx-auto text-[var(--accent-primary)] shadow-lg shadow-emerald-500/10">
-                <Sparkles size={32} />
+              <div className="flex justify-center">
+                <BrandLogo size="xl" animated />
               </div>
 
               <div className="space-y-2 max-w-md mx-auto">

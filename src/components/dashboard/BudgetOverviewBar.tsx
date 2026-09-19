@@ -61,11 +61,14 @@ export const BudgetOverviewBar: React.FC<BudgetOverviewBarProps> = ({ onSelectCa
   return (
     <div
       data-animate="chart"
-      className="p-6 md:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-app)] shadow-[var(--shadow-sm)] space-y-6"
+      className="p-6 md:p-8 rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-app)] shadow-[var(--shadow-sm)] space-y-6 relative overflow-hidden"
     >
-      <div className="flex items-center justify-between flex-wrap gap-3">
+      {/* Ambient gradient corner */}
+      <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-teal-500/10 via-emerald-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
+
+      <div className="flex items-center justify-between flex-wrap gap-3 relative z-10">
         <div>
-          <span className="text-[11px] uppercase tracking-wider font-bold text-[var(--text-muted)]">
+          <span className="text-[11px] uppercase tracking-wider font-extrabold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
             Budget Adherence Engine
           </span>
           <h3 className="text-base font-bold text-[var(--text-primary)] mt-0.5">
@@ -77,7 +80,7 @@ export const BudgetOverviewBar: React.FC<BudgetOverviewBarProps> = ({ onSelectCa
         </div>
 
         <div className="flex items-center gap-2.5">
-          <div className={`px-2.5 py-1 rounded-full text-xs font-semibold border flex items-center gap-1.5 ${status.badgeClass}`}>
+          <div className={`px-2.5 py-1 rounded-full text-xs font-semibold border flex items-center gap-1.5 shadow-sm ${status.badgeClass}`}>
             {status.icon}
             <span>{status.label}</span>
           </div>
@@ -87,16 +90,22 @@ export const BudgetOverviewBar: React.FC<BudgetOverviewBarProps> = ({ onSelectCa
         </div>
       </div>
 
-      {/* Main Composite Progress Bar */}
-      <div className="w-full bg-[var(--bg-app)] rounded-full h-3 overflow-hidden p-0.5 border border-[var(--border-subtle)]">
+      {/* Main Composite Progress Bar with Radiant Gradient */}
+      <div className="w-full bg-[var(--bg-app)] rounded-full h-3 overflow-hidden p-0.5 border border-[var(--border-subtle)] relative z-10">
         <div
-          className={`h-full rounded-full transition-all duration-700 ease-out ${status.colorClass}`}
+          className={`h-full rounded-full transition-all duration-700 ease-out ${
+            overallPercentage > 100
+              ? 'bg-gradient-to-r from-rose-500 to-red-600'
+              : overallPercentage >= 80
+              ? 'bg-gradient-to-r from-amber-400 to-orange-500'
+              : 'bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400'
+          }`}
           style={{ width: `${Math.min(100, overallPercentage)}%` }}
         />
       </div>
 
       {/* Categories Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1 relative z-10">
         {activeCategories.map((catId) => {
           const cat = CATEGORY_MAP[catId] || CATEGORY_MAP.other;
           const allocated = plan.allocations[catId] || 0;
@@ -110,7 +119,7 @@ export const BudgetOverviewBar: React.FC<BudgetOverviewBarProps> = ({ onSelectCa
             <div
               key={catId}
               onClick={() => onSelectCategory && onSelectCategory(catId)}
-              className="p-4 rounded-2xl bg-[var(--bg-app)] border border-[var(--border-subtle)] hover:border-[var(--border-hover)] transition-all cursor-pointer group hover:-translate-y-0.5"
+              className="p-4 rounded-2xl bg-[var(--bg-surface-elevated)]/50 border border-[var(--border-subtle)] hover:border-[var(--border-accent)] hover:shadow-md transition-all cursor-pointer group hover:-translate-y-0.5"
             >
               <div className="flex items-center justify-between mb-2.5">
                 <div className="flex items-center gap-2.5">
@@ -132,10 +141,13 @@ export const BudgetOverviewBar: React.FC<BudgetOverviewBarProps> = ({ onSelectCa
               </div>
 
               {/* Progress bar */}
-              <div className="w-full bg-[var(--bg-surface-elevated)] rounded-full h-1.5 overflow-hidden">
+              <div className="w-full bg-[var(--bg-app)] rounded-full h-1.5 overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all duration-500 ${catStatus.colorClass}`}
-                  style={{ width: `${percent}%` }}
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${percent}%`,
+                    backgroundColor: isOver ? '#f43f5e' : cat.color || '#10b981',
+                  }}
                 />
               </div>
 

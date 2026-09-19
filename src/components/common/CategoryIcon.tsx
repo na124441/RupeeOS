@@ -64,10 +64,12 @@ export const CategoryIcon: React.FC<CategoryIconProps> = ({
 
   return (
     <div
-      className={`inline-flex items-center justify-center rounded-xl p-2.5 transition-transform ${className}`}
+      className={`inline-flex items-center justify-center rounded-xl p-2.5 transition-all duration-200 border ${className}`}
       style={{
         backgroundColor: cat.bgLight,
         color: cat.color,
+        borderColor: `${cat.color}33`,
+        boxShadow: `0 2px 10px -2px ${cat.color}25`,
       }}
     >
       {renderIcon()}

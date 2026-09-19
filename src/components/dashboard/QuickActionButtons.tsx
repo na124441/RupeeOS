@@ -19,50 +19,50 @@ export const QuickActionButtons: React.FC<QuickActionButtonsProps> = ({
 }) => {
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <Button
-        variant="primary"
-        size="sm"
-        icon={<Plus size={15} strokeWidth={2.5} />}
+      {/* Primary Quick Expense with glowing emerald gradient */}
+      <button
         onClick={onOpenExpense}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:brightness-110 text-slate-950 shadow-md shadow-emerald-500/25 active:scale-95 transition-all min-h-[34px]"
       >
-        Expense
-      </Button>
+        <Plus size={15} strokeWidth={2.5} />
+        <span>Expense</span>
+      </button>
 
-      <Button
-        variant="secondary"
-        size="sm"
-        icon={<TrendingUp size={15} className="text-[var(--accent-primary)]" />}
+      {/* Income with Cyan Tint */}
+      <button
         onClick={onOpenIncome}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-semibold text-xs bg-[var(--bg-surface-elevated)] hover:bg-cyan-500/10 text-[var(--text-primary)] border border-[var(--border-app)] hover:border-cyan-500/40 shadow-sm active:scale-95 transition-all min-h-[34px]"
       >
-        Income
-      </Button>
+        <TrendingUp size={15} className="text-cyan-400" />
+        <span>Income</span>
+      </button>
 
-      <Button
-        variant="secondary"
-        size="sm"
-        icon={<Calculator size={15} className="text-cyan-400" />}
+      {/* What If Simulator with Violet Tint */}
+      <button
         onClick={onOpenSimulator}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-semibold text-xs bg-[var(--bg-surface-elevated)] hover:bg-violet-500/10 text-[var(--text-primary)] border border-[var(--border-app)] hover:border-violet-500/40 shadow-sm active:scale-95 transition-all min-h-[34px]"
       >
-        What If?
-      </Button>
+        <Calculator size={15} className="text-violet-400" />
+        <span>What If?</span>
+      </button>
 
-      <Button
-        variant="secondary"
-        size="sm"
-        icon={<ShoppingCart size={15} className="text-amber-400" />}
+      {/* Essential with Amber Tint */}
+      <button
         onClick={onOpenEssential}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-semibold text-xs bg-[var(--bg-surface-elevated)] hover:bg-amber-500/10 text-[var(--text-primary)] border border-[var(--border-app)] hover:border-amber-500/40 shadow-sm active:scale-95 transition-all min-h-[34px]"
       >
-        Essential
-      </Button>
+        <ShoppingCart size={15} className="text-amber-400" />
+        <span>Essential</span>
+      </button>
 
-      <Button
-        variant="secondary"
-        size="sm"
-        icon={<ArrowRightLeft size={15} className="text-purple-400" />}
+      {/* Move Money with Blue Tint */}
+      <button
         onClick={onOpenMoveMoney}
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-semibold text-xs bg-[var(--bg-surface-elevated)] hover:bg-blue-500/10 text-[var(--text-primary)] border border-[var(--border-app)] hover:border-blue-500/40 shadow-sm active:scale-95 transition-all min-h-[34px]"
       >
-        Move Money
-      </Button>
+        <ArrowRightLeft size={15} className="text-blue-400" />
+        <span>Move Money</span>
+      </button>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, ChevronLeft, ChevronRight, Download, Moon, Plus, RotateCcw, Sparkles, Sun, Wifi, WifiOff } from 'lucide-react';
 import { useFinance } from '../../context/FinanceContext';
 import { useTheme } from '../../context/ThemeContext';
+import { BrandLogo } from '../common/BrandLogo';
 import { AnimatedNumber } from '../ui/AnimatedNumber';
 import { Button } from '../ui/Button';
 
@@ -44,25 +45,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuickExpense, onOpenExport
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-[var(--bg-surface)]/80 backdrop-blur-md border-b border-[var(--border-app)] px-4 lg:px-8 py-3 flex items-center justify-between transition-colors">
+    <header className="sticky top-0 z-30 bg-[var(--bg-surface)]/85 backdrop-blur-xl border-b border-[var(--border-app)] px-4 lg:px-8 py-2.5 flex items-center justify-between transition-colors shadow-sm">
       {/* Brand & Month Switcher */}
       <div className="flex items-center gap-3 md:gap-6">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[var(--accent-primary)] to-emerald-400 flex items-center justify-center shadow-md shadow-emerald-500/20 text-slate-950 font-bold text-lg font-mono">
-            ₹
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold tracking-tight text-[var(--text-primary)] text-base md:text-lg leading-none">
-                RupeeOS
-              </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-[var(--accent-surface)] text-[var(--accent-primary)] border border-[var(--border-accent)]">
-                Pro
-              </span>
-            </div>
-            <p className="text-[11px] text-[var(--text-muted)] hidden sm:block">Financial Operating System</p>
-          </div>
-        </div>
+        <BrandLogo size="md" showText={true} showBadge={true} />
 
         {/* Month Selector Switcher */}
         <div className="flex items-center bg-[var(--bg-surface-elevated)] border border-[var(--border-app)] rounded-xl p-1 shadow-sm">
@@ -112,23 +98,33 @@ export const Header: React.FC<HeaderProps> = ({ onOpenQuickExpense, onOpenExport
           <span>{isOnline ? 'Local-First' : 'Offline Mode'}</span>
         </div>
 
-        {/* Available Money pill */}
-        <div className="hidden sm:flex items-center gap-2.5 bg-[var(--bg-surface-elevated)] border border-[var(--border-app)] rounded-xl px-3.5 py-1.5 shadow-sm">
-          <span className="text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-medium">Available</span>
+        {/* Available Money pill with luminous gradient & glow */}
+        <div className="hidden sm:flex items-center gap-2.5 bg-gradient-to-r from-[var(--bg-surface-elevated)] to-[var(--accent-surface)] border border-[var(--border-accent)] rounded-xl px-3.5 py-1.5 shadow-sm shadow-emerald-500/10">
+          <span className="text-[10px] uppercase tracking-wider text-[var(--text-muted)] font-bold">Available</span>
           <AnimatedNumber
             value={metrics.remainingMoney}
-            className="text-sm font-bold text-[var(--accent-primary)]"
+            className="text-sm font-extrabold text-[var(--accent-primary)] font-mono"
           />
         </div>
 
-        {/* Theme Toggle Button */}
+        {/* Luminous Theme Toggle Button */}
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-xl text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] border border-[var(--border-app)] transition-all min-w-[38px] min-h-[38px] flex items-center justify-center"
-          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+          className="px-2.5 py-1.5 rounded-xl text-[var(--text-secondary)] hover:text-[var(--text-primary)] bg-[var(--bg-surface-elevated)] hover:bg-[var(--bg-surface-hover)] border border-[var(--border-app)] hover:border-[var(--border-hover)] transition-all min-h-[38px] flex items-center gap-1.5 shadow-sm group"
+          title={`Currently on ${theme === 'dark' ? 'Midnight Lit' : 'Radiant Sunlight'}. Click to switch theme.`}
           aria-label="Toggle theme"
         >
-          {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+          {theme === 'dark' ? (
+            <>
+              <Sun size={15} className="text-amber-400 group-hover:rotate-45 transition-transform" />
+              <span className="text-xs font-semibold hidden md:inline">Lit Dark</span>
+            </>
+          ) : (
+            <>
+              <Moon size={15} className="text-indigo-500 group-hover:-rotate-12 transition-transform" />
+              <span className="text-xs font-semibold hidden md:inline">Sunlight</span>
+            </>
+          )}
         </button>
 
         {/* Demo reset button */}

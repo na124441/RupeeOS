@@ -17,9 +17,9 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    surface: 'bg-[var(--bg-surface)] border-[var(--border-app)]',
-    elevated: 'bg-[var(--bg-surface-elevated)] border-[var(--border-app)] shadow-[var(--shadow-sm)]',
-    glass: 'bg-[var(--bg-surface)]/90 backdrop-blur-md border-[var(--border-app)]',
+    surface: 'bg-[var(--bg-surface)] border-[var(--border-app)] shadow-[var(--shadow-sm)]',
+    elevated: 'bg-[var(--bg-surface-elevated)] border-[var(--border-app)] shadow-[var(--shadow-md)]',
+    glass: 'bg-[var(--bg-surface)]/85 backdrop-blur-xl border-[var(--border-app)] shadow-[var(--shadow-sm)]',
   };
 
   const interactiveStyles = interactive
