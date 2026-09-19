@@ -31,13 +31,12 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
   const moreTabs: { id: ActiveTab; label: string; icon: React.ReactNode }[] = [
-    { id: 'expenses', label: 'Expenses & Ledger', icon: <CreditCard size={18} /> },
+    { id: 'essentials', label: 'Shopping List', icon: <ShoppingCart size={18} /> },
     { id: 'goals', label: 'Savings Goals', icon: <Target size={18} /> },
     { id: 'subscriptions', label: 'Subscriptions', icon: <Repeat size={18} /> },
     { id: 'simulator', label: '"What If?" Simulator', icon: <Calculator size={18} /> },
     { id: 'calendar', label: 'Spend Calendar', icon: <Calendar size={18} /> },
-    { id: 'analytics', label: 'Analytics & Health', icon: <Activity size={18} /> },
-    { id: 'settings', label: 'Data & Privacy', icon: <Settings size={18} /> },
+    { id: 'settings', label: 'Settings & Data', icon: <Settings size={18} /> },
   ];
 
   return (
@@ -120,28 +119,30 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           <Plus size={24} strokeWidth={3} />
         </button>
 
-        {/* Essentials */}
+        {/* Expenses */}
         <button
-          onClick={() => setActiveTab('essentials')}
+          onClick={() => setActiveTab('expenses')}
           className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-colors min-w-[48px] min-h-[48px] ${
-            activeTab === 'essentials' ? 'text-[var(--accent-primary)] font-semibold' : 'text-[var(--text-muted)]'
+            activeTab === 'expenses' ? 'text-[var(--accent-primary)] font-semibold' : 'text-[var(--text-muted)]'
           }`}
-          aria-label="Essentials"
+          aria-label="Expenses"
         >
-          <ShoppingCart size={20} />
-          <span className="text-[10px]">Essentials</span>
+          <CreditCard size={20} />
+          <span className="text-[10px]">Expenses</span>
         </button>
 
-        {/* More */}
+        {/* More Tools */}
         <button
           onClick={() => setShowMoreMenu(true)}
           className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl transition-colors min-w-[48px] min-h-[48px] ${
-            showMoreMenu ? 'text-[var(--accent-primary)] font-semibold' : 'text-[var(--text-muted)]'
+            showMoreMenu || ['analytics', 'essentials', 'goals', 'subscriptions', 'simulator', 'calendar', 'settings'].includes(activeTab)
+              ? 'text-[var(--accent-primary)] font-semibold'
+              : 'text-[var(--text-muted)]'
           }`}
           aria-label="More options"
         >
           <MoreHorizontal size={20} />
-          <span className="text-[10px]">More</span>
+          <span className="text-[10px]">Tools</span>
         </button>
       </nav>
     </>

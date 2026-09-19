@@ -41,7 +41,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
   const { metrics, healthScore } = useFinance();
   const [collapsed, setCollapsed] = useState(false);
 
-  const navItems: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: string }[] = [
+  const [showAllTools, setShowAllTools] = useState(false);
+
+  // 4 Core Main Navigation Tabs
+  const coreNavItems: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'dashboard',
       label: 'Dashboard',
@@ -49,18 +52,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
     },
     {
       id: 'planning',
-      label: 'Monthly Planning',
+      label: 'Plan & Budget',
       icon: <PieChart size={18} />,
-      badge: metrics.allocationGap < 0 ? '⚠️' : undefined,
+      badge: metrics.allocationGap < 0 ? '⚠️ Over' : undefined,
     },
     {
       id: 'expenses',
-      label: 'Expenses & Ledger',
+      label: 'Expenses',
       icon: <CreditCard size={18} />,
     },
     {
+      id: 'analytics',
+      label: 'Analytics & Health',
+      icon: <Activity size={18} />,
+      badge: `${healthScore.score}`,
+    },
+  ];
+
+  // Secondary Tools
+  const secondaryNavItems: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: string }[] = [
+    {
       id: 'essentials',
-      label: 'Essentials & Shopping',
+      label: 'Shopping List',
       icon: <ShoppingCart size={18} />,
       badge: metrics.upcomingEssentialsTotal > 0 ? formatRupee(metrics.upcomingEssentialsTotal, true) : undefined,
     },
@@ -85,17 +98,59 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
       icon: <Calendar size={18} />,
     },
     {
-      id: 'analytics',
-      label: 'Analytics & Score',
-      icon: <Activity size={18} />,
-      badge: `${healthScore.score}`,
-    },
-    {
       id: 'settings',
-      label: 'Data & Privacy',
+      label: 'Settings & Data',
       icon: <Settings size={18} />,
     },
   ];
+
+  const isSecondaryActive = secondaryNavItems.some((item) => item.id === activeTab);
+
+  const renderNavButton = (item: { id: ActiveTab; label: string; icon: React.ReactNode; badge?: string }) => {
+    const isActive = activeTab === item.id;
+    return (
+      <button
+        key={item.id}
+        onClick={() => setActiveTab(item.id)}
+        title={collapsed ? item.label : undefined}
+        className={`w-full flex items-center ${
+          collapsed ? 'justify-center px-0' : 'justify-between px-3'
+        } py-2.5 rounded-xl text-xs md:text-sm font-medium transition-all duration-150 relative group overflow-hidden ${
+          isActive
+            ? 'bg-gradient-to-r from-[var(--accent-surface)] via-[var(--accent-surface)]/60 to-emerald-500/5 text-[var(--accent-primary)] border border-[var(--border-accent)] font-semibold shadow-sm'
+            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] border border-transparent'
+        }`}
+      >
+        {isActive && (
+          <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-gradient-to-b from-emerald-400 to-teal-400 rounded-r-full shadow-sm shadow-emerald-400" />
+        )}
+        <div className="flex items-center gap-3">
+          <span
+            className={`transition-transform duration-150 group-hover:scale-110 ${
+              isActive ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)]'
+            }`}
+          >
+            {item.icon}
+          </span>
+          {!collapsed && <span className="truncate">{item.label}</span>}
+        </div>
+
+        {!collapsed && item.badge && (
+          <span
+            className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
+              item.badge.includes('Over')
+                ? 'bg-amber-500/20 text-amber-300'
+                : isActive
+                ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary)]'
+                : 'bg-[var(--bg-surface-elevated)] text-[var(--text-muted)]'
+            }`}
+          >
+            {item.badge}
+          </span>
+        )}
+      </button>
+    );
+  };
 
   return (
     <aside
@@ -103,7 +158,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
         collapsed ? 'w-20' : 'w-64'
       } bg-[var(--bg-surface)]/60 backdrop-blur-md border-r border-[var(--border-app)] p-3 flex flex-col justify-between hidden md:flex transition-all duration-300 ease-out select-none shadow-sm`}
     >
-      <div className="space-y-3">
+      <div className="space-y-4">
         {/* Collapse toggle row & brand mark */}
         <div className="flex items-center justify-between px-1 py-1">
           {collapsed ? (
@@ -121,7 +176,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           ) : (
             <>
               <span className="text-[10px] uppercase tracking-wider font-extrabold text-[var(--text-muted)]">
-                Navigation
+                Menu
               </span>
               <button
                 onClick={() => setCollapsed(true)}
@@ -135,80 +190,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           )}
         </div>
 
-        {/* Safe Spending Mini Widget (Expanded mode only) */}
-        {!collapsed && (
-          <div className="p-3.5 rounded-2xl bg-gradient-to-br from-[var(--bg-surface-elevated)] via-[var(--bg-surface)] to-[var(--accent-surface)]/25 border border-[var(--border-accent)] shadow-sm space-y-1 transition-all relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--accent-glow)] rounded-full blur-xl pointer-events-none" />
-            <div className="flex items-center justify-between text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-bold relative z-10">
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)] animate-pulse" />
-                Safe Daily Burn
-              </span>
-              <span className="text-[var(--accent-primary)] font-mono font-bold bg-[var(--accent-surface)] px-1.5 py-0.5 rounded text-[10px]">
-                {metrics.daysRemaining}d left
-              </span>
-            </div>
-            <div className="text-2xl font-black font-mono text-[var(--accent-primary)] flex items-baseline gap-1 relative z-10">
-              <AnimatedNumber value={metrics.safeDailySpend} />
-              <span className="text-xs font-normal text-[var(--text-muted)]">/day</span>
-            </div>
-            <div className="mt-2 text-[11px] text-[var(--text-muted)] flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] relative z-10">
-              <span>Committed:</span>
-              <span className="font-mono text-[var(--text-secondary)] font-semibold">
-                {formatRupee(metrics.upcomingEssentialsTotal + metrics.upcomingSubscriptionsTotal)}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {/* Nav item list */}
+        {/* Primary Core Navigation */}
         <nav className="space-y-1">
-          {navItems.map((item) => {
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                title={collapsed ? item.label : undefined}
-                className={`w-full flex items-center ${
-                  collapsed ? 'justify-center px-0' : 'justify-between px-3'
-                } py-2.5 rounded-xl text-xs md:text-sm font-medium transition-all duration-150 relative group overflow-hidden ${
-                  isActive
-                    ? 'bg-gradient-to-r from-[var(--accent-surface)] via-[var(--accent-surface)]/60 to-emerald-500/5 text-[var(--accent-primary)] border border-[var(--border-accent)] font-semibold shadow-sm'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-surface-hover)] border border-transparent'
-                }`}
-              >
-                {isActive && (
-                  <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-gradient-to-b from-emerald-400 to-teal-400 rounded-r-full shadow-sm shadow-emerald-400" />
-                )}
-                <div className="flex items-center gap-3">
-                  <span
-                    className={`transition-transform duration-150 group-hover:scale-110 ${
-                      isActive ? 'text-[var(--accent-primary)]' : 'text-[var(--text-muted)]'
-                    }`}
-                  >
-                    {item.icon}
-                  </span>
-                  {!collapsed && <span className="truncate">{item.label}</span>}
-                </div>
-
-                {!collapsed && item.badge && (
-                  <span
-                    className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded ${
-                      item.badge === '⚠️'
-                        ? 'bg-amber-500/20 text-amber-300'
-                        : isActive
-                        ? 'bg-[var(--accent-primary)]/20 text-[var(--accent-primary)]'
-                        : 'bg-[var(--bg-surface-elevated)] text-[var(--text-muted)]'
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+          {coreNavItems.map(renderNavButton)}
         </nav>
+
+        {/* Secondary Tools Section */}
+        <div className="pt-2 border-t border-[var(--border-subtle)] space-y-1">
+          {!collapsed && (
+            <div className="flex items-center justify-between px-3 py-1 text-[10px] uppercase tracking-wider font-bold text-[var(--text-muted)]">
+              <span>More Tools</span>
+              {isSecondaryActive && (
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)]" />
+              )}
+            </div>
+          )}
+          {secondaryNavItems.slice(0, collapsed ? 6 : (showAllTools || isSecondaryActive ? 6 : 2)).map(renderNavButton)}
+
+          {!collapsed && !showAllTools && !isSecondaryActive && (
+            <button
+              onClick={() => setShowAllTools(true)}
+              className="w-full text-left px-3 py-1.5 text-xs text-[var(--text-muted)] hover:text-[var(--accent-primary)] font-medium transition-colors"
+            >
+              + More tools ({secondaryNavItems.length - 2})
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Financial Health Snapshot in Sidebar footer */}
